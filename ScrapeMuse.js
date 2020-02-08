@@ -2,33 +2,42 @@ const puppeteer = require('puppeteer');
 const url = "https://musescore.com/user/168725/scores/1587526";
 
 async function run() {
-  const browser = await puppeteer.launch({headless: false});
-  const webpage = await browser.newPage();
-  await webpage.setViewport({
-    width: 1920,
-    height: 1080,
-  });
-  await webpage.goto(url);
-  webpage.waitForNavigation();
-
-  var sheetsData = await webpage.evaluate(async () => {
-    var musicData = [];
-    const image = document.querySelector('.image > img');
-    const url = image.getAttribute('src');
-    const numPages = document.querySelectorAll('.page').length;
-    musicData.push({"page" : url});
-    var data = {"numberOfPages": [numPages] ,"sheetMusic":musicData}
-    return data;
+  return new Promise(async(resolve, reject)=> {
+    try{
+      const browser = await puppeteer.launch({headless: false});
+      const webpage = await browser.newPage();
+      await webpage.setViewport({
+        width: 1920,
+        height: 1080,
+      });
+      await webpage.goto(url);
+      // await webpage.waitForNavigation();
+      await webpage.waitForSelector('.image');
+      var sheetsData = await webpage.evaluate(async () => {
+        var musicData = [];
+        const image = document.querySelector('.image > img');
+        const url = image.getAttribute('src');
+        const numPages = document.querySelectorAll('.page').length;
+        musicData.push({"page" : url});
+        var data = {"numberOfPages": [numPages] ,"sheetMusic":musicData}
+        return data;
+      })
+      // await webpage.close();
+      await browser.close();
+      return resolve(sheetsData);
+    }
+    catch(e) {
+      return reject(e);
+    }
   })
-
-  const linksArr = createLinksArray(sheetsData)
+  
+  // const linksArr = createLinksArray(sheetsData)
  
-  console.log(linksArr);
-  await webpage.close();
-  browser.close();
+  // console.log(linksArr);
+
 }
 
-run();
+run().then(console.log).catch(console.error);
 
 function createLinksArray(arr) {
   var links = [];
