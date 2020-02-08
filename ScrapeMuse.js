@@ -10,32 +10,37 @@ async function run() {
   });
   await webpage.goto(url);
   webpage.waitForNavigation();
+
   var sheetsData = await webpage.evaluate(async () => {
     var musicData = [];
-    const screenHeight = document.querySelector('.viewerInner').style.height;
     const image = document.querySelector('.image > img');
     const url = image.getAttribute('src');
-    const pageNumber = image.parentElement.parentElement.dataset.page;
     const numPages = document.querySelectorAll('.page').length;
-    musicData.push({[pageNumber] : url});
-    var data = {"height":[screenHeight],"numberOfPages":[numPages],"sheetMusic":[musicData]}
+    musicData.push({"page" : url});
+    var data = {"numberOfPages": [numPages] ,"sheetMusic":musicData}
     return data;
   })
 
-
-
-
-  console.log(sheetsData);
+  const linksArr = createLinksArray(sheetsData)
+ 
+  console.log(linksArr);
   await webpage.close();
   browser.close();
 }
 
 run();
 
-/*
-[
-    {0: "www.poop.com"},
-    {1: "www.poop.com"},
-]
+function createLinksArray(arr) {
+  var links = [];
+  const shit = arr.sheetMusic[0].page;
+  //console.log(shit);
 
-*/
+  const shit2 = arr.sheetMusic[0].page;
+  const poop = shit2.replace('0.png', '1.png');
+  //console.log("poop: " + poop);
+  
+  
+  links.push(shit2);
+  links.push(poop);
+  return links;
+}
