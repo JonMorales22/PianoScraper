@@ -7,31 +7,35 @@ async function run() {
   await webpage.setViewport({
     width: 1920,
     height: 1080,
-    // deviceScaleFactor: 1,
   });
   await webpage.goto(url);
   webpage.waitForNavigation();
-  // webpage.waitForSelector(`.image`);
-  var sheetsData = await webpage.evaluate(() => {
-    var poop = [];
-    var data = document.querySelector(`.page_0`);
-    var pageNumber = data.dataset.page;
-    var url = document.querySelector('.image > img').getAttribute('src');
-    poop.push({[pageNumber] : [url]});
-    poop.push(url);
-    return poop;
+  var sheetsData = await webpage.evaluate(async () => {
+    var musicData = [];
+    const screenHeight = document.querySelector('.viewerInner').style.height;
+    const image = document.querySelector('.image > img');
+    const url = image.getAttribute('src');
+    const pageNumber = image.parentElement.parentElement.dataset.page;
+    const numPages = document.querySelectorAll('.page').length;
+    musicData.push({[pageNumber] : url});
+    var data = {"height":[screenHeight],"numberOfPages":[numPages],"sheetMusic":[musicData]}
+    return data;
   })
 
+
+
+
   console.log(sheetsData);
-  await browser.close();
+  await webpage.close();
+  browser.close();
 }
 
 run();
 
 /*
 [
-    {page_0: "www.poop.com"},
-    {page_1: "www.poop.com"},
+    {0: "www.poop.com"},
+    {1: "www.poop.com"},
 ]
 
 */
