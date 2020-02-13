@@ -7,12 +7,6 @@ const https = require('https');
 
 const directory = "results";
 const pdf = new PDFDocument;
-// const siteUrl = "https://musescore.com/user/168725/scores/1587526"
-// const urlsArr = [
-//     "https://musescore.com/static/musescore/scoredata/gen/1/9/6/4873691/52076ed23df30427d9095b89a94a589062f9570a/score_0.svg?no-cache=1531731575&nb=1",
-//     "https://musescore.com/static/musescore/scoredata/gen/6/2/5/1587526/ac9527c3affa7566e9b43dbf17d2c0804335ccbd/score_0.svg?no-cache=1531731630&nb=1"
-//     "https://musescore.com/static/musescore/scoredata/gen/1/9/6/4873691/52076ed23df30427d9095b89a94a589062f9570a/score_1.svg?no-cache=1531731575&nb=1"
-// ]
 
 async function DownloadPngFiles(urls) {
     await Promise.all(urls.map(DownloadSinglePngFile))
@@ -31,15 +25,6 @@ function DownloadSinglePngFile(url, filename) {
                     return resolve;
                 })
             });
-            // let response = await axios.get(url);
-            // console.log(response);
-            // const file = fs.createWriteStream(`${directory}/page_${0}.png`);
-            // response.pipe(file);
-            // file.on('finish', function() {
-            //     file.close();
-            //     console.log("Download complete!");
-            //     return;
-            // })
         }
         catch(e) {
             reject(e);
@@ -47,7 +32,8 @@ function DownloadSinglePngFile(url, filename) {
     })
 }
 
-async function GetSheetMusic(urls) {
+async function DownloadPdfFiles(urls, filename) {
+    console.log(`Downloading file ${filename}...`)
     for(var i=0;i<urls.length;i++) {
         const page = await axios.get(urls[i]);
         SvgToPdf(pdf, page.data, 0, 0);
@@ -56,7 +42,8 @@ async function GetSheetMusic(urls) {
         }
     }
     
-    WriteToFile("results/result.pdf");
+    WriteToFile(`${directory}/${filename}.pdf`);
+    console.log(`Download complete!`);
 }
 
 function WriteToFile(filename) {
@@ -65,8 +52,5 @@ function WriteToFile(filename) {
     pdf.end();
 }
 
-//GetUrls();
-
 exports.DownloadPngFiles = DownloadPngFiles;
-exports.DownloadSinglePngFile = DownloadSinglePngFile;
-// GetSheetMusic(urlsArr);
+exports.DownloadPdfFiles = DownloadPdfFiles;

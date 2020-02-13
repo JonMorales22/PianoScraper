@@ -1,10 +1,12 @@
 const puppeteer = require('puppeteer');
-// const url = "https://musescore.com/user/168725/scores/1587526"; // png
-const url = "https://musescore.com/user/12461571/scores/3291706"; // png
-// const url = "https://musescore.com/user/17081446/scores/5256444"; //svg
 const poop = require('./CreatePdf');
+// const url = "https://musescore.com/user/168725/scores/1587526"; // png
+// const url = "https://musescore.com/user/12461571/scores/3291706"; // png
+const url = "https://musescore.com/user/17081446/scores/5256444"; //svg
+
 // all scores saved after May 2017 = svg
 const NEW_API_DATE =  new Date(2017,2);
+let imageType;
 
 async function run() {
   return new Promise(async(resolve, reject)=> {
@@ -50,7 +52,7 @@ async function run() {
 
 function createLinksArray(data) {
   let links = [];
-  let imageType = getImageType(data.datePublished);
+  imageType = getImageType(data.datePublished);
   
   for(var i=0;i<data.numberOfPages;i++){
     const poop = data.url.replace(`_0.${imageType}`, `_${i}.${imageType}`);
@@ -71,9 +73,9 @@ run().then( async function (data) {
   const links = createLinksArray(data);
   console.log(links);
 
-  // for(let x=0;x<links.length;x++) {
-  //   await poop.DownloadSinglePngFile(links[x], `${data.title}_${x}`);
-  // }
-  // links.forEach(async (i,link) => await poop.DownloadSinglePngFile(link, `${data.title}_${i}`));
-  poop.DownloadPngFiles(links).catch(console.error);
+  if(imageType=="svg")
+    poop.DownloadPdfFiles(links, data.title);
+  else   
+    poop.DownloadPngFiles(links).catch(console.error);
+
 }).catch(console.error);
