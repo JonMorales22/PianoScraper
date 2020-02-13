@@ -1,8 +1,10 @@
 const puppeteer = require('puppeteer');
 // const url = "https://musescore.com/user/168725/scores/1587526"; // png
-// const url = "https://musescore.com/user/12461571/scores/3291706"; // png
+const url = "https://musescore.com/user/12461571/scores/3291706"; // png
 // const url = "https://musescore.com/user/17081446/scores/5256444"; //svg
+const poop = require('./CreatePdf');
 // all scores saved after May 2017 = svg
+const NEW_API_DATE =  new Date(2017,2);
 
 async function run() {
   return new Promise(async(resolve, reject)=> {
@@ -45,28 +47,33 @@ async function run() {
   })
 }
 
-run().then(data => {
-  console.log(data);
-  const links = createLinksArray(data);
-  console.log(links);
-}).catch(console.error);
 
 function createLinksArray(data) {
   let links = [];
-  const link = data.url;
-  links.push(link);
-
-  let imageType = "png";
-  if(new Date(data.datePublished) >= new Date(2017,3))
-    imageType = "svg";
-
-  for(var i=1;i<data.numberOfPages;i++){
-    const poop = link.replace(`0.${imageType}`, `${i}.${imageType}`);
+  let imageType = getImageType(data.datePublished);
+  
+  for(var i=0;i<data.numberOfPages;i++){
+    const poop = data.url.replace(`_0.${imageType}`, `_${i}.${imageType}`);
     links.push(poop);
   }
   return links;
 }
 
-function compareDates(){
-  console.log(new Date())
+function getImageType(datePublished) {
+  if(new Date(datePublished) >= NEW_API_DATE)
+    return "svg";
+  
+  return "png";
 }
+
+run().then( async function (data) {
+  console.log(data);
+  const links = createLinksArray(data);
+  console.log(links);
+
+  // for(let x=0;x<links.length;x++) {
+  //   await poop.DownloadSinglePngFile(links[x], `${data.title}_${x}`);
+  // }
+  // links.forEach(async (i,link) => await poop.DownloadSinglePngFile(link, `${data.title}_${i}`));
+  poop.DownloadPngFiles(links).catch(console.error);
+}).catch(console.error);
