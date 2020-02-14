@@ -2,14 +2,14 @@ const PDFDocument = require('pdfkit');
 const SvgToPdf = require('svg-to-pdfkit');
 const fs = require('fs');
 const axios = require('axios');
-const cheerio = require('cheerio');
 const https = require('https');
 
 const directory = "results";
 const pdf = new PDFDocument;
 
-async function DownloadPngFiles(urls) {
-    await Promise.all(urls.map(DownloadSinglePngFile))
+async function DownloadPngFiles(urls, filename) {
+    await Promise.all(urls.map((url, i) => DownloadSinglePngFile(url, `${filename}_${i}`)))
+    // urls.map((url, i) => console.log(`${filename}_${i}`))
 } 
 
 function DownloadSinglePngFile(url, filename) {
