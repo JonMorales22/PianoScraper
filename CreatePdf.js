@@ -9,7 +9,6 @@ const pdf = new PDFDocument;
 
 async function DownloadPngFiles(urls, filename) {
     await Promise.all(urls.map((url, i) => DownloadSinglePngFile(url, `${filename}_${i}`)))
-    // urls.map((url, i) => console.log(`${filename}_${i}`))
 } 
 
 function DownloadSinglePngFile(url, filename) {

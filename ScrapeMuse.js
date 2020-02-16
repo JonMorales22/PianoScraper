@@ -1,8 +1,8 @@
 const puppeteer = require('puppeteer');
 const poop = require('./CreatePdf');
 // const url = "https://musescore.com/user/168725/scores/1587526"; // png
-const url = "https://musescore.com/user/12461571/scores/3291706"; // png
-// const url = "https://musescore.com/user/17081446/scores/5256444"; //svg
+// const url = "https://musescore.com/user/12461571/scores/3291706"; // png
+const url = "https://musescore.com/user/17081446/scores/5256444"; //svg
 
 // all scores saved after May 2017 = svg
 const NEW_API_DATE =  new Date(2017,2);
@@ -72,9 +72,11 @@ run().then( async function (data) {
   const links = createLinksArray(data);
   console.log(links);
 
-  if(imageType=="svg")
-    poop.DownloadPdfFiles(links, data.title);
-  else   
-    poop.DownloadPngFiles(links, data.title).catch(console.error);
+  data.links = links;
+  console.log(data);
+  // if(imageType=="svg")
+  //   poop.DownloadPdfFiles(links, data.title);
+  // else   
+  //   poop.DownloadPngFiles(links, data.title).catch(console.error);
 
 }).catch(console.error);
