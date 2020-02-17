@@ -5,12 +5,12 @@ const axios = require('axios');
 
 const directory = "results";
 const pdf = new PDFDocument;
-import { SheetMusicDownloader } from "./SheetMusicDownloader"
+import { ISheetMusicDownloader } from "./ISheetMusicDownloader"
 
-export class PdfDownloader implements SheetMusicDownloader {
-    async Download(urls : string[], filename: string) : Promise<null[]> {
+export class PdfDownloader implements ISheetMusicDownloader {
+    async Download(urls : string[], filename: string) : Promise<void> {
         console.log(`Downloading file ${filename}...`)
-        return new Promise<null>( async(resolve, reject) => {
+        return new Promise<void>( async(resolve, reject) => {
             try{
                 for(var i=0;i<urls.length;i++) {
                     const page = await axios.get(urls[i]);

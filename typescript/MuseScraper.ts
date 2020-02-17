@@ -30,7 +30,7 @@ export class MuseScraper implements IMusicScraper {
         return new Promise(async(resolve, reject)=> {
             try{
               //setup stuff
-              const browser = await puppeteer.launch({headless: false});
+              const browser = await puppeteer.launch();
               const webpage = await browser.newPage();
               await webpage.setViewport({
                 width: 1920,
@@ -65,27 +65,6 @@ export class MuseScraper implements IMusicScraper {
                 return resolve(stuff);
               })
               .catch(console.error);
-            //   var sheetsData = await webpage.evaluate(async () => {
-                // var musicData = [];
-                // const image = document.querySelector('.image > img');
-                // const url = image.getAttribute('src');
-                // const numPages = document.querySelectorAll('.page').length;
-                
-                // var scriptsData = Array.from(document.querySelectorAll("script")).filter(x=>x.getAttribute('type')=='application/ld+json');
-                // var scriptsInfo  = JSON.parse(scriptsData[0].text);
-                
-                // musicData.push({"page" : url});
-                // var data = { 
-                //   "title": scriptsInfo.name,
-                //   "datePublished": scriptsInfo.datePublished,
-                //   "numberOfPages": numPages,
-                //   "url":url
-                // };
-        
-                // return data;
-            //   })
-            //   return resolve(sheetsData);
-              //return resolve(stuff);
             }
             catch(e) {
               return reject(e);

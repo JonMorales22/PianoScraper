@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node ts-built/poop.js"
+    "test": "node ts-built/Client.js"
   },
   "keywords": [],
   "author": "",

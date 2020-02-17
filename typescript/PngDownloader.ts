@@ -3,11 +3,11 @@ const axios = require('axios');
 const https = require('https');
 
 const directory = "results";
-import { SheetMusicDownloader } from "./SheetMusicDownloader"
+import { ISheetMusicDownloader } from "./ISheetMusicDownloader"
 
-export class PngDownloader implements SheetMusicDownloader {
-    async Download(urls : string[], filename : string) : Promise<null> {
-        return new Promise<null>(async(resolve, reject) => {
+export class PngDownloader implements ISheetMusicDownloader {
+    async Download(urls : string[], filename : string) : Promise<void> {
+        return new Promise<void>(async(resolve, reject) => {
             try {
                 await Promise.all(urls.map((url, i) => this.DownloadSinglePngFile(url, `${filename}_${i}`)))
                 return resolve;
@@ -22,7 +22,7 @@ export class PngDownloader implements SheetMusicDownloader {
         return "I am a png";
     }
 
-    async DownloadSinglePngFile(url : string, filename : string) : Promise<null> {
+    async DownloadSinglePngFile(url : string, filename : string) : Promise<void> {
         return new Promise((resolve, reject) => {
             try{
                 https.get(url, function(res) {
