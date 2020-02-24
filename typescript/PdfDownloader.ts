@@ -29,12 +29,8 @@ export class PdfDownloader implements ISheetMusicDownloader {
             }
         })
     }
-    
-    Hello() : string {
-        return "I am a pdf";
-    }
 
-    WriteToFile(filename : string) : void {
+    private WriteToFile(filename : string) : void {
         const file = fs.createWriteStream(filename);
         pdf.pipe(file);
         pdf.end();

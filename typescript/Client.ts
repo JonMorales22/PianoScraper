@@ -4,7 +4,8 @@ import { MuseScraper } from './MuseScraper';
 
 function Test() : void {
     // const museScraper = new MuseScraper("https://musescore.com/user/12461571/scores/3291706");
-    const museScraper =  new MuseScraper("https://musescore.com/user/12461571/scores/3291706");
+    // const museScraper =  new MuseScraper("https://musescore.com/user/12461571/scores/3291706");
+    const museScraper =  new MuseScraper("https://musescore.com/user/1809056/scores/1019991");
 
     museScraper.ScrapeWebsite().then((data)=>{
         console.log(data);

@@ -9,7 +9,9 @@ export class PngDownloader implements ISheetMusicDownloader {
     async Download(urls : string[], filename : string) : Promise<void> {
         return new Promise<void>(async(resolve, reject) => {
             try {
-                await Promise.all(urls.map((url, i) => this.DownloadSinglePngFile(url, `${filename}_${i}`)))
+                const ass = filename.replace(/ /g, '_');
+                this.CreateDirectory(`${directory}/${ass}`);
+                await Promise.all(urls.map((url, i) => this.DownloadSinglePngFile(url, ass, i)))
                 return resolve;
             }
             catch(e) {
@@ -18,16 +20,18 @@ export class PngDownloader implements ISheetMusicDownloader {
         }) 
     } 
 
-    Hello() : string {
-        return "I am a png";
+    private CreateDirectory(directory : string) : void {
+        if(!fs.existsSync(directory)) {
+            fs.mkdirSync(directory)
+        }
     }
 
-    async DownloadSinglePngFile(url : string, filename : string) : Promise<void> {
+    private async DownloadSinglePngFile(url : string, filename : string, index: number) : Promise<void> {
         return new Promise((resolve, reject) => {
             try{
                 https.get(url, function(res) {
                     console.log(`Downloading file @ ${url}...`);
-                    const file = fs.createWriteStream(`${directory}/${filename}.png`);
+                    const file = fs.createWriteStream(`${directory}/${filename}/${filename}_${index}.png`);
                     res.pipe(file);
                     file.on('finish', function() {
                         file.close();
