@@ -20,12 +20,6 @@ export class PngDownloader implements ISheetMusicDownloader {
         }) 
     } 
 
-    private CreateDirectory(directory : string) : void {
-        if(!fs.existsSync(directory)) {
-            fs.mkdirSync(directory)
-        }
-    }
-
     private async DownloadSinglePngFile(url : string, filename : string, index: number) : Promise<void> {
         return new Promise((resolve, reject) => {
             try{
@@ -44,5 +38,11 @@ export class PngDownloader implements ISheetMusicDownloader {
                 reject(e);
             }
         })
+    }
+
+    private CreateDirectory(directory : string) : void {
+        if(!fs.existsSync(directory)) {
+            fs.mkdirSync(directory)
+        }
     }
 }
