@@ -25,7 +25,7 @@ async function run() {
         var musicData = [];
         const image = document.querySelector('.image > img');
         const url = image.getAttribute('src');
-        const numPages = document.querySelectorAll('.page').length;
+        const numPages = document.querySelectorAll('.gxb83').length;
         
         var scriptsData = Array.from(document.querySelectorAll("script")).filter(x=>x.getAttribute('type')=='application/ld+json');
         var scriptsInfo  = JSON.parse(scriptsData[0].text);

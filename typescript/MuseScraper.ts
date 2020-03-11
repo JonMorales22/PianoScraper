@@ -38,13 +38,13 @@ export class MuseScraper implements IMusicScraper {
               });
               await webpage.goto(this.url);
         
-              await webpage.waitForSelector('.image');
+              await webpage.waitForSelector('img');
               let stuff;
               webpage.evaluate(() => {
                 var musicData = [];
-                const image = document.querySelector('.image > img');
+                const image = document.querySelector('img');
                 const url = image.getAttribute('src');
-                const numPages = document.querySelectorAll('.page').length;
+                const numPages = document.querySelectorAll('.gXB83').length;
 
                 var scriptsData = Array.from(document.querySelectorAll("script")).filter(x=>x.getAttribute('type')=='application/ld+json');
                 var scriptsInfo  = JSON.parse(scriptsData[0].text);
@@ -74,7 +74,7 @@ export class MuseScraper implements IMusicScraper {
 
     CreateLinksArray(data : any) : string[] {
         let links = [];
-        imageType = this.getImageType(data.datePublished);
+        imageType = this.getImageType(data.datePublished, data.url);
         
         for(var i=0;i<data.numberOfPages;i++){
           const poop = data.url.replace(`_0.${imageType}`, `_${i}.${imageType}`);
@@ -83,10 +83,12 @@ export class MuseScraper implements IMusicScraper {
         return links;
     }
 
-    getImageType(datePublished: Date) : string {
-        if(new Date(datePublished) >= NEW_API_DATE)
+    getImageType(datePublished: Date, url: string) : string {
+        if((new Date(datePublished) >= NEW_API_DATE) 
+            || url.includes("score_0.svg")
+        )
           return "svg";
-        
+
         return "png";
     }
 }
